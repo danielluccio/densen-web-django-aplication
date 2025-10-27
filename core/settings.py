@@ -79,8 +79,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'USER': config('DB_USER'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
+
+        # variáveis para melhorar minha latência e picos de CPU
+        "CONN_MAX_AGE": config("CONN_MAX_AGE", default=60, cast=int),
+        # transação automátima por request
+        "ATOMIC_REQUESTS": config("ATOMIC_REQUESTS", default=False, cast=bool),
+
     }
 }
 
@@ -114,6 +124,8 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 
 USE_TZ = True
+
+AUTH_USER_MODEL = 'authentication.CustomUser'
 
 
 # Static files (CSS, JavaScript, Images)
